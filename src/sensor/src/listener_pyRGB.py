@@ -22,7 +22,7 @@ def callback(ros_data):
         print('received image of type: "%s"' % ros_data.format)
 
     np_arr = np.fromstring(ros_data.data, np.uint8)
-    image_np = cv2.imdecode(np_arr, cv2.IMREAD_UNCHANGED)
+    image_np = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
     method = "GridFAST"
     # feat_det = cv2.FeatureDetector_create(method)
@@ -41,7 +41,6 @@ def callback(ros_data):
     #     cv2.circle(image_np,(int(x),int(y)), 3, (0,0,255), -1)
 
     cv2.imshow('cv_img', image_np)
-    cv2.imshow('cv_dep', image_np[:, :, 3])
     cv2.waitKey(2)
 
     #### Create CompressedIamge ####
@@ -58,7 +57,7 @@ def main():
     rospy.init_node('listener', anonymous=True)
 
     # 특정 토픽(chatter)를 callback이라는 이름의 함수로 받아들이며, 메시지 타입은 test_msg
-    rospy.Subscriber("RGBD", CompressedImage, callback)
+    rospy.Subscriber("chatter", CompressedImage, callback)
 
     rospy.spin()
 
